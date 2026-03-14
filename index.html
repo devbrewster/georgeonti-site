@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>George Ontiveros — Security Engineer & Founder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #080b10;
+      --bg2:      #0d1117;
+      --bg3:      #111820;
+      --border:   #1e2d3d;
+      --cyan:     #00e5ff;
+      --green:    #39ff8a;
+      --dim:      #4a6375;
+      --mid:      #7ea8c4;
+      --text:     #c9dce9;
+      --white:    #eef4f8;
+      --red:      #ff4557;
+      --mono:     'IBM Plex Mono', monospace;
+      --display:  'Syne', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(8, 11, 16, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--cyan); }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--dim);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Grid background */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    /* Glow orb */
+    #hero::after {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      right: -100px; top: 50%;
+      transform: translateY(-50%);
+      background: radial-gradient(circle, rgba(0,229,255,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 900px;
+      animation: fadeUp 0.9s ease both;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 24px;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--cyan);
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(48px, 7vw, 88px);
+      font-weight: 800;
+      line-height: 1;
+      color: var(--white);
+      letter-spacing: -0.04em;
+      margin-bottom: 24px;
+    }
+    h1 .accent { color: var(--cyan); }
+    h1 .dim-text { color: var(--dim); }
+
+    .hero-desc {
+      font-size: 15px;
+      color: var(--mid);
+      max-width: 520px;
+      margin-bottom: 40px;
+      line-height: 1.8;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--cyan);
+      color: var(--bg);
+      border: 1px solid var(--cyan);
+    }
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--cyan);
+      box-shadow: 0 0 24px rgba(0,229,255,0.2);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--mid);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 64px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      animation: fadeUp 0.9s 0.2s ease both;
+    }
+    .stat-num {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--white);
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: 100px 48px;
+    }
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      max-width: 40px;
+      height: 1px;
+      background: var(--cyan);
+    }
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.03em;
+      margin-bottom: 48px;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      max-width: 1100px;
+    }
+    .about-text p {
+      color: var(--mid);
+      margin-bottom: 16px;
+      font-size: 14px;
+      line-height: 1.9;
+    }
+    .about-text p strong { color: var(--white); }
+
+    .about-certs {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .cert-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: border-color 0.2s;
+    }
+    .cert-item:hover { border-color: var(--cyan); }
+    .cert-icon {
+      width: 36px; height: 36px;
+      border-radius: 4px;
+      background: rgba(0,229,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .cert-name {
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .cert-issuer {
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    /* ── SKILLS ── */
+    #skills { max-width: 1100px; margin: 0 auto; }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .skill-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .skill-card:hover { border-color: rgba(0,229,255,0.3); transform: translateY(-2px); }
+    .skill-card:hover::before { transform: scaleX(1); }
+
+    .skill-card-title {
+      font-family: var(--display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .tag {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 3px;
+      background: rgba(0,229,255,0.07);
+      border: 1px solid rgba(0,229,255,0.15);
+      color: var(--mid);
+    }
+    .tag.green {
+      background: rgba(57,255,138,0.07);
+      border-color: rgba(57,255,138,0.15);
+      color: var(--green);
+    }
+
+    /* ── FEATURED PROJECT: CVERiskPilot ── */
+    #cveriskpilot {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .feature-project-card {
+      max-width: 1100px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 480px;
+    }
+    .feature-project-content {
+      padding: 56px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .project-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pulse-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(57,255,138,0.4); }
+      50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(57,255,138,0); }
+    }
+
+    .feature-project-content h2 {
+      font-family: var(--display);
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      line-height: 1;
+    }
+    .feature-project-content h2 span { color: var(--cyan); }
+    .feature-desc {
+      color: var(--mid);
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+    .feature-highlights {
+      list-style: none;
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .feature-highlights li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--mid);
+    }
+    .feature-highlights li::before {
+      content: '→';
+      color: var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .feature-tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 32px;
+    }
+
+    .feature-project-visual {
+      position: relative;
+      background: var(--bg);
+      border-left: 1px solid var(--border);
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .feature-project-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .terminal {
+      position: relative;
+      background: rgba(8,11,16,0.9);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .terminal-bar {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+    .terminal-title {
+      margin-left: 8px;
+      font-size: 11px;
+      color: var(--dim);
+    }
+    .terminal-body {
+      padding: 20px;
+      font-size: 11.5px;
+      line-height: 1.8;
+    }
+    .t-dim   { color: var(--dim); }
+    .t-cyan  { color: var(--cyan); }
+    .t-green { color: var(--green); }
+    .t-red   { color: var(--red); }
+    .t-white { color: var(--white); }
+    .t-indent { padding-left: 16px; }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--cyan);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 1.2s step-end infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* ── PROJECTS ── */
+    #projects { max-width: 1100px; margin: 0 auto; }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.25s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .project-card:hover {
+      border-color: rgba(0,229,255,0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .project-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .project-card-icon {
+      font-size: 22px;
+    }
+    .project-card-arrow {
+      font-size: 16px;
+      color: var(--dim);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .project-card:hover .project-card-arrow {
+      color: var(--cyan);
+      transform: translate(2px, -2px);
+    }
+    .project-card h3 {
+      font-family: var(--display);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .project-card p {
+      font-size: 12.5px;
+      color: var(--dim);
+      line-height: 1.7;
+    }
+
+    /* ── EXPERIENCE ── */
+    #experience {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .exp-list {
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .exp-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 32px;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .exp-item:last-child { border-bottom: none; }
+    .exp-date {
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 0.06em;
+      padding-top: 4px;
+    }
+    .exp-role {
+      font-family: var(--display);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .exp-company {
+      font-size: 12px;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .exp-bullets li {
+      font-size: 12.5px;
+      color: var(--dim);
+      padding-left: 14px;
+      position: relative;
+    }
+    .exp-bullets li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--border);
+    }
+
+    /* ── HTB / CTF ── */
+    #ctf {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .ctf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .ctf-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ctf-card::after {
+      content: attr(data-platform);
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dim);
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 3px;
+    }
+    .ctf-card h3 {
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .ctf-card p {
+      font-size: 12.5px;
+      color: var(--dim);
+      margin-bottom: 16px;
+      line-height: 1.7;
+    }
+    .ctf-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .badge {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 3px;
+      border: 1px solid;
+    }
+    .badge-red   { color: var(--red);   border-color: rgba(255,69,87,0.3);   background: rgba(255,69,87,0.07); }
+    .badge-cyan  { color: var(--cyan);  border-color: rgba(0,229,255,0.3);   background: rgba(0,229,255,0.07); }
+    .badge-green { color: var(--green); border-color: rgba(57,255,138,0.3);  background: rgba(57,255,138,0.07); }
+
+    /* ── CONTACT ── */
+    #contact {
+      text-align: center;
+      padding: 120px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    #contact::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(0,229,255,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #contact .section-label { justify-content: center; }
+    #contact .section-label::after { display: none; }
+    #contact .section-title { margin-bottom: 16px; }
+    .contact-sub {
+      color: var(--dim);
+      font-size: 14px;
+      max-width: 480px;
+      margin: 0 auto 40px;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--mid);
+      text-decoration: none;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .contact-link:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 20px rgba(0,229,255,0.1);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--dim);
+    }
+    footer a {
+      color: var(--dim);
+      text-decoration: none;
+    }
+    footer a:hover { color: var(--cyan); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      section { padding: 72px 24px; }
+      #hero { padding: 100px 24px 60px; }
+      h1 { font-size: 44px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .feature-project-card { grid-template-columns: 1fr; }
+      .feature-project-visual { border-left: none; border-top: 1px solid var(--border); min-height: 280px; }
+      .ctf-grid { grid-template-columns: 1fr; }
+      .hero-stats { flex-wrap: wrap; gap: 24px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+      .exp-item { grid-template-columns: 1fr; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#hero">george<span>.</span>onti</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#cveriskpilot">CVERiskPilot</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#ctf">CTF</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">Security Engineer · Founder · Builder</div>
+      <h1>
+        George<br>
+        <span class="accent">Ontiveros</span><span class="dim-text">.</span>
+      </h1>
+      <p class="hero-desc">
+        Cybersecurity professional, SOC analyst, and founder of
+        <strong style="color:var(--white)">CVERiskPilot</strong> —
+        an AI-powered vulnerability triage platform built for defenders.
+        Turning threat data into decisive action.
+      </p>
+      <div class="hero-ctas">
+        <a href="https://cveriskpilot.com" target="_blank" class="btn btn-primary">
+          ⚡ CVERiskPilot Beta
+        </a>
+        <a href="#contact" class="btn btn-ghost">
+          Get in touch →
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">847+</div>
+          <div class="stat-label">CVEs Triaged</div>
+        </div>
+        <div>
+          <div class="stat-num">Sec+</div>
+          <div class="stat-label">CompTIA Certified</div>
+        </div>
+        <div>
+          <div class="stat-num">HTB</div>
+          <div class="stat-label">Hack The Box</div>
+        </div>
+        <div>
+          <div class="stat-num">SOC</div>
+          <div class="stat-label">Analyst</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <div class="section-label">About</div>
+        <div class="section-title">Defender.<br>Developer.<br>Founder.</div>
+        <p>
+          I'm a <strong>cybersecurity professional</strong> based in San Antonio, TX, with a
+          background spanning SOC operations, vulnerability management, and offensive
+          security research. I've spent years hunting threats, triaging CVEs, and
+          sharpening skills on Hack The Box and TryHackMe.
+        </p>
+        <p>
+          When I wasn't defending networks, I was building —
+          full-stack React apps, Firebase projects, and ultimately
+          <strong>CVERiskPilot</strong>, a SaaS product that automates the
+          vulnerability triage workflow using agentic AI.
+        </p>
+        <p>
+          I believe the best security tooling is built by people who've
+          actually lived the pain of alert fatigue and CVE noise. That belief
+          is the foundation of everything I ship.
+        </p>
+      </div>
+      <div class="about-certs reveal">
+        <div class="section-label">Credentials</div>
+        <div style="height:8px"></div>
+        <div class="cert-item">
+          <div class="cert-icon">🛡</div>
+          <div>
+            <div class="cert-name">CompTIA Security+</div>
+            <div class="cert-issuer">CompTIA · Active</div>
+          </div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-icon">⚔️</div>
+          <div>
+            <div class="cert-name">Hack The Box — Machines Owned</div>
+            <div class="cert-issuer">Offensive Security Practice</div>
+          </div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-icon">🎯</div>
+          <div>
+            <div class="cert-name">TryHackMe — Threat Intel Rooms</div>
+            <div class="cert-issuer">Blue Team · Cyber Threat Intelligence</div>
+          </div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-icon">🔬</div>
+          <div>
+            <div class="cert-name">ELK Stack Home Lab</div>
+            <div class="cert-issuer">SIEM · Log Analysis · Detection</div>
+          </div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-icon">⚛️</div>
+          <div>
+            <div class="cert-name">React / Firebase Developer</div>
+            <div class="cert-issuer">Full-Stack Web Applications</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED: CVERiskPilot -->
+  <section id="cveriskpilot">
+    <div class="section-label reveal">Featured Product</div>
+    <div class="feature-project-card reveal">
+      <div class="feature-project-content">
+        <div class="project-eyebrow">
+          <span class="pulse-dot"></span>
+          Live Beta · Free Access
+        </div>
+        <h2>CVERisk<span>Pilot</span></h2>
+        <p class="feature-desc">
+          AI-powered CVE triage SaaS that transforms raw vulnerability scan
+          outputs into prioritized risk decisions, business impact statements,
+          and ticket-ready action plans — in under 3 minutes.
+        </p>
+        <ul class="feature-highlights">
+          <li>Ingests Nessus, Qualys, Rapid7, Trivy, Grype, Snyk, and more</li>
+          <li>Claude AI correlates findings with KEV, CVSS, and asset context</li>
+          <li>Auto-generates exec-ready business impact statements</li>
+          <li>One-click Jira / ServiceNow ticket output — zero reformatting</li>
+          <li>Real-time exploit intelligence surfaces active APT targets</li>
+        </ul>
+        <div class="feature-tech-stack">
+          <span class="tag green">Claude AI</span>
+          <span class="tag">NVD API</span>
+          <span class="tag">KEV Intelligence</span>
+          <span class="tag">Multi-scanner</span>
+          <span class="tag">Jira / ServiceNow</span>
+          <span class="tag green">Beta Live</span>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="https://cveriskpilot.com/signup" target="_blank" class="btn btn-primary">Start Free Beta</a>
+          <a href="https://cveriskpilot.com/demo" target="_blank" class="btn btn-ghost">View Demo</a>
+        </div>
+      </div>
+
+      <div class="feature-project-visual">
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="dot dot-r"></span>
+            <span class="dot dot-y"></span>
+            <span class="dot dot-g"></span>
+            <span class="terminal-title">cveriskpilot — beta workspace</span>
+          </div>
+          <div class="terminal-body">
+            <div><span class="t-green">▶</span> <span class="t-dim">upload</span> <span class="t-white">scan_results.json</span> <span class="t-dim">--context</span> <span class="t-cyan">"prod k8s"</span></div>
+            <div class="t-dim">   Ingesting 847 findings from 12 scanners...</div>
+            <div class="t-dim">   Running AI risk correlation engine...</div>
+            <div style="height:8px"></div>
+            <div><span class="t-red">CRITICAL</span> <span class="t-white">CVE-2024-3400</span> <span class="t-dim">· PAN-OS RCE · CVSS 10.0</span> <span class="t-red">⚡ KEV</span></div>
+            <div class="t-indent t-dim">Impact: Perimeter firewall exposed — APT active</div>
+            <div class="t-indent t-dim">Action: Apply PAN-OS hotfix · ETA 2h</div>
+            <div class="t-indent"><span class="t-green">✓</span> <span class="t-dim">Ticket #INC-0042 created in Jira</span></div>
+            <div style="height:8px"></div>
+            <div><span class="t-red">CRITICAL</span> <span class="t-white">CVE-2024-21762</span> <span class="t-dim">· Fortinet SSL-VPN</span> <span class="t-red">⚡ KEV</span></div>
+            <div class="t-indent t-dim">Impact: Remote code execution via auth bypass</div>
+            <div class="t-indent"><span class="t-green">✓</span> <span class="t-dim">Ticket #INC-0043 created in Jira</span></div>
+            <div style="height:8px"></div>
+            <div><span class="t-green">✓</span> <span class="t-white">847 findings</span> <span class="t-dim">→</span> <span class="t-cyan">9 critical decisions ready</span></div>
+            <div><span class="t-dim">$</span> <span class="typing-cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label reveal">Technical Stack</div>
+    <div class="section-title reveal">Skills &amp; Tools</div>
+    <div class="skills-grid reveal">
+      <div class="skill-card">
+        <div class="skill-card-title">🔵 Blue Team / SOC</div>
+        <div class="skill-tags">
+          <span class="tag">SIEM</span>
+          <span class="tag">ELK Stack</span>
+          <span class="tag">Splunk</span>
+          <span class="tag">Log Analysis</span>
+          <span class="tag">Incident Response</span>
+          <span class="tag">Alert Triage</span>
+          <span class="tag">Threat Intelligence</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-title">⚔️ Offensive Security</div>
+        <div class="skill-tags">
+          <span class="tag">Hack The Box</span>
+          <span class="tag">TryHackMe</span>
+          <span class="tag">Kali Linux</span>
+          <span class="tag">Network Scanning</span>
+          <span class="tag">FTP Exploits</span>
+          <span class="tag">Privilege Escalation</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-title">🔐 Vulnerability Management</div>
+        <div class="skill-tags">
+          <span class="tag green">CVE Triage</span>
+          <span class="tag green">NVD API</span>
+          <span class="tag green">KEV</span>
+          <span class="tag">Nessus</span>
+          <span class="tag">Qualys</span>
+          <span class="tag">Rapid7</span>
+          <span class="tag">Trivy</span>
+          <span class="tag">CVSS</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-title">⚛️ Development</div>
+        <div class="skill-tags">
+          <span class="tag">React</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Firebase</span>
+          <span class="tag">HTML/CSS</span>
+          <span class="tag">REST APIs</span>
+          <span class="tag">Git / GitHub</span>
+          <span class="tag">Node.js</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-title">🤖 AI / Automation</div>
+        <div class="skill-tags">
+          <span class="tag green">Claude AI (Anthropic)</span>
+          <span class="tag green">Agentic Workflows</span>
+          <span class="tag">Prompt Engineering</span>
+          <span class="tag">AI Triage Pipelines</span>
+          <span class="tag">LLM Integration</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-title">🖥️ Infrastructure</div>
+        <div class="skill-tags">
+          <span class="tag">Linux</span>
+          <span class="tag">Kubernetes</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Network Security</span>
+          <span class="tag">Firewall Config</span>
+          <span class="tag">Home Lab</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-label reveal">Background</div>
+    <div class="section-title reveal">Experience</div>
+    <div class="exp-list reveal">
+      <div class="exp-item">
+        <div class="exp-date">2024 — Present</div>
+        <div>
+          <div class="exp-role">Founder & CEO</div>
+          <div class="exp-company">CVERiskPilot · cveriskpilot.com</div>
+          <ul class="exp-bullets">
+            <li>Built and launched an AI-powered CVE triage SaaS from zero to live beta</li>
+            <li>Designed agentic AI pipeline using Claude to auto-generate risk decisions from raw scan data</li>
+            <li>Integrated NVD API, CISA KEV, and multi-scanner support (Nessus, Qualys, Trivy, Rapid7)</li>
+            <li>Shipped Jira / ServiceNow ticket generation — reducing triage time from hours to minutes</li>
+            <li>Sole engineer and product owner; running focused beta with security teams</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-date">Prior</div>
+        <div>
+          <div class="exp-role">SOC Analyst</div>
+          <div class="exp-company">Security Operations</div>
+          <ul class="exp-bullets">
+            <li>Monitored SIEM dashboards and triaged security alerts in real-time</li>
+            <li>Investigated threat intelligence reports and mapped to IOCs</li>
+            <li>Maintained ELK Stack home lab for ongoing detection engineering</li>
+            <li>Earned and maintained CompTIA Security+ certification</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-date">Ongoing</div>
+        <div>
+          <div class="exp-role">React / Full-Stack Developer</div>
+          <div class="exp-company">Independent Projects</div>
+          <ul class="exp-bullets">
+            <li>Built React applications with Firebase backend — hosted and deployed</li>
+            <li>Developed blog-style app with fetch/POST/DELETE via REST API</li>
+            <li>Shipped security-focused tooling including the CVERiskPilot frontend</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTF / Hacking -->
+  <section id="ctf">
+    <div class="section-label reveal">Offensive Practice</div>
+    <div class="section-title reveal">Hacking &amp; CTF</div>
+    <div class="ctf-grid reveal">
+      <div class="ctf-card" data-platform="Hack The Box">
+        <h3>Hack The Box</h3>
+        <p>
+          Actively rooting machines on HackTheBox — from beginner to
+          intermediate Linux/Windows targets. Owned Fawn (FTP) and
+          continuing to progress through the platform's machine catalog.
+        </p>
+        <div class="ctf-badges">
+          <span class="badge badge-red">Linux</span>
+          <span class="badge badge-red">Windows</span>
+          <span class="badge badge-cyan">FTP</span>
+          <span class="badge badge-cyan">Enumeration</span>
+          <span class="badge badge-green">Fawn ✓</span>
+        </div>
+      </div>
+      <div class="ctf-card" data-platform="TryHackMe">
+        <h3>TryHackMe</h3>
+        <p>
+          Completed rooms across defensive and offensive tracks —
+          including a Cyber Threat Intelligence room focused on
+          identifying threat actors from incident reports.
+        </p>
+        <div class="ctf-badges">
+          <span class="badge badge-cyan">Threat Intel</span>
+          <span class="badge badge-cyan">SOC Analyst Path</span>
+          <span class="badge badge-green">CTI Room ✓</span>
+          <span class="badge badge-red">Offensive</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">Contact</div>
+    <div class="section-title">Let's Work Together</div>
+    <p class="contact-sub">
+      Open to consulting, collaborations, and beta partnerships for CVERiskPilot.
+      Reach out through any of the channels below.
+    </p>
+    <div class="contact-links">
+      <a href="https://cveriskpilot.com" target="_blank" class="contact-link">
+        ⚡ CVERiskPilot.com
+      </a>
+      <a href="https://linkedin.com/in/george-ontiveros" target="_blank" class="contact-link">
+        🔗 LinkedIn
+      </a>
+      <a href="mailto:admin@cveriskpilot.com" class="contact-link">
+        ✉️ admin@cveriskpilot.com
+      </a>
+      <a href="https://georgeonti.com" target="_blank" class="contact-link">
+        🌐 georgeonti.com
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 George Ontiveros · San Antonio, TX</span>
+    <span>
+      <a href="https://cveriskpilot.com" target="_blank">CVERiskPilot</a>
+      &nbsp;·&nbsp;
+      <a href="https://linkedin.com/in/george-ontiveros" target="_blank">LinkedIn</a>
+    </span>
+  </footer>
+
+  <!-- SCROLL REVEAL -->
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    reveals.forEach(r => io.observe(r));
+  </script>
+</body>
+</html>
